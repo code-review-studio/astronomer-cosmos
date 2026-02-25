@@ -522,7 +522,7 @@ class DbtGraph:
             with remote_cache_key_path.open("w") as fp:
                 json.dump(cache_dict, fp)
         else:
-            Variable.set(self.cache_key, cache_dict, serialize_json=True)
+            Variable.set(f"{self.cache_key}_dbt_ls", cache_dict, serialize_json=True)
 
     def _get_dbt_ls_remote_cache(self, remote_cache_dir: Path | ObjectStoragePath) -> dict[str, str]:
         """Loads the remote cache for dbt ls."""
@@ -559,7 +559,7 @@ class DbtGraph:
             cache_dict = (
                 self._get_dbt_ls_remote_cache(remote_cache_dir)
                 if remote_cache_dir
-                else Variable.get(self.cache_key, deserialize_json=True)
+                else Variable.get(f"{self.cache_key}_dbt_ls", deserialize_json=True)
             )
         except tuple(airflow_variable_exceptions):
             return cache_dict
@@ -980,7 +980,7 @@ class DbtGraph:
             cache_dict = (
                 self._get_yaml_selectors_remote_cache(remote_cache_dir)
                 if remote_cache_dir
-                else Variable.get(self.cache_key, deserialize_json=True)
+                else Variable.get(f"{self.cache_key}_yaml_selectors", deserialize_json=True)
             )
         except tuple(airflow_variable_exceptions):
             return cache_dict
@@ -1039,7 +1039,7 @@ class DbtGraph:
             with remote_cache_key_path.open("w") as fp:
                 json.dump(cache_dict, fp)
         else:
-            Variable.set(self.cache_key, cache_dict, serialize_json=True)
+            Variable.set(f"{self.cache_key}_yaml_selectors", cache_dict, serialize_json=True)
 
     def parse_yaml_selectors(self, selector_definitions: dict[str, Any]) -> YamlSelectors:
         """
